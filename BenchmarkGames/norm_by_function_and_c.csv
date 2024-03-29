@@ -1,0 +1,21 @@
+Language,Function,Energy consumption in microjoules,Runtime in seconds
+c,fannkuch-redux,1.0,1.0
+c,fasta,1.0,1.0
+c,mandelbrot,,1.0
+c,n-body,1.0,1.0
+c,reverse-complement,1.0,1.0
+erlang,fannkuch-redux,14.684912386382255,16.21046419123398
+erlang,fasta,0.0,0.0
+erlang,mandelbrot,inf,1939.5763887833748
+erlang,n-body,25134.983920364753,66.10797327537462
+erlang,reverse-complement,650573.2518491937,914.4543462071316
+go,fannkuch-redux,0.09009871010816854,2.6749538785256552
+go,fasta,9.603865838258404,1.016155640347957
+go,mandelbrot,inf,27.215567148054227
+go,n-body,16.50804385538874,1.6984740013251993
+go,reverse-complement,0.0,0.49525382724042266
+java,fannkuch-redux,2.212931411604835,1.8790052714116003
+java,fasta,0.5304215363240683,1.0702429493622063
+java,mandelbrot,inf,27.157825971903257
+java,n-body,578.9569325089246,1.689363209891791
+java,reverse-complement,0.0,0.5360130211273149
