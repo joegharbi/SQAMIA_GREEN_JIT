@@ -66,10 +66,15 @@ if __name__ == "__main__":
     # runtime = end_time - start_time - (num_clients * 0.1)
     runtime = end_time - start_time
 
-    # Then kill the process
-    subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
+    # subprocess.run("sudo pkill -f 'scaphandre'")
+    subprocess.run(["sudo", "pkill", "-f", "scaphandre"], check=True)
+
+    subprocess.run(["sudo", "pkill", "-f", "beam.smp"], check=True)
+
     # # Then kill the process
-    subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
+    # subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
+    # # # Then kill the process
+    # subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
 
     current_path = os.getcwd()
     json_file_path = os.path.join(current_path, f"{file_name}.json")
@@ -91,7 +96,7 @@ if __name__ == "__main__":
             consumption = consumer.get("consumption", 0.0)
             
             # Check the server consumption
-            if f"{server_name}.exe" in exe.lower():
+            if f"beam.smp" in exe.lower():
                 total_server_consumption += consumption
                 number_samples +=1
     if (number_samples != 0):
