@@ -17,10 +17,9 @@ def communicate_with_erlang_server(message, host, port):
         erlang_socket.connect((host, port))
         erlang_socket.sendall(message.encode())
         erlang_socket.recv(1024).decode()
-        erlang_socket.close
-        # erlang_socket.recv(1024).decode()
         # response = erlang_socket.recv(1024).decode()
         # print(f"Received from Erlang server: {response}")
+        erlang_socket.close
 
 def erlang_client_thread(message, host, port_erlang):
     # print(f"Erlang Client sending message: {message}")
