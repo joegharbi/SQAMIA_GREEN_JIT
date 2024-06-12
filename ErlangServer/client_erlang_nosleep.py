@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # subprocess.run("sudo pkill -f 'scaphandre'")
     subprocess.run(["sudo", "pkill", "-f", "scaphandre"], check=True)
 
-    subprocess.run(["sudo", "pkill", "-f", "beam.smp"], check=True)
+    subprocess.run(["sudo", "pkill", "-f", "erl"], check=True)
 
     # # Then kill the process
     # subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
