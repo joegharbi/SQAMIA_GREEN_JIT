@@ -10,3 +10,4 @@ sysinfo.*
 *.beam
 *.erl
 *.txt
+*.json
