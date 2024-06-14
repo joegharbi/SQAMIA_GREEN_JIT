@@ -20,7 +20,7 @@ if __name__ == "__main__":
     parser.add_argument('function', metavar='function', type=str,help='Provide the function.')
     parser.add_argument('parameters', nargs='+', metavar='parameters', type=str,help='Provide one or more arguments as input for the function seperated by space.')
     parser.add_argument('-c','--cmd', metavar='command', default='', type=str,help='Provide the command to run the program executable.')
-    parser.add_argument('-e','--exe', metavar='executable', default='erl', type=str,help='Provide the process name of the program you want to measure without extension.')
+    parser.add_argument('-e','--exe', metavar='executable', default='beam.smp', type=str,help='Provide the process name of the program you want to measure without extension.')
     parser.add_argument('-r','--rep', metavar='repetition', default=1, type=int,help='Provide the number of repetition.')
     parser.add_argument('-f','--file', metavar='file', default='', type=str,help='Provide the csv file name of the result by default executable_module.')
     
@@ -34,12 +34,12 @@ if __name__ == "__main__":
     result_file = args.file
 
     # Programming language we are measuring in process level name without extension
-    # by default it is erl for Erlang
+    # by default it is beam.smp for Erlang in Linux
     prog_lang = args.exe
 
     measure_cmd = args.cmd
 
-    exe_prog_lang = f"{prog_lang}.exe"
+    exe_prog_lang = f"{prog_lang}"
 
 
     for parameter in parameters:
@@ -56,6 +56,7 @@ if __name__ == "__main__":
             time.sleep(5)
 
             if (measure_cmd == ''):
+                subprocess.Popen("erlc "+ module +".erl", shell=True)
                 # Create the command function to measure
                 erl_command = "erl -noshell -run " + module + " " + function + " " + parameter + " -s init stop"
             print(erl_command)
@@ -71,9 +72,9 @@ if __name__ == "__main__":
             runtime = end_time - start_time
 
             # Then kill scaphandre process to stop the measurement
-            subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
+            subprocess.run(f'pkill -f scaphandre', shell=True)
             # Then kill the erlang process
-            subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
+            subprocess.run(f'pkill -f erl', shell=True)
 
             current_path = os.getcwd()
             json_file_path = os.path.join(current_path, f"{file_name}.json")
@@ -107,7 +108,7 @@ if __name__ == "__main__":
             if(result_file==''):
                 result_file = f"{prog_lang}_{module}"
             # Write results to the csv file
-            with open(f"{result_file}.csv", 'a', newline='') as csv_file:
+            with open(f"linux_{result_file}.csv", 'a', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=';')
                 csv_writer.writerow([module, function, parameter, number_samples, final_consumption, runtime])
 
