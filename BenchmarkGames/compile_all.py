@@ -16,7 +16,7 @@ def main():
     print ('Checking' + root)
     makefile = os.path.join(root, "Makefile")
     if file_exists(makefile):
-      cmd = 'cd ' + root + '& make ' + action
+      cmd = 'cd ' + root + '&& make ' + action
       #cmd = 'ls -la'
       pipes = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -37,7 +37,7 @@ def main():
           print ('[OK]')
       if action == 'measure':
         if root != "." and 'git' not in root and 'c' not in root:
-          command = ["python", ".\compile_all.py", "measure"]
+          command = ["python", "./compile_all.py", "measure"]
           subprocess.run(command)
           time.sleep(5)
 if __name__ == '__main__':

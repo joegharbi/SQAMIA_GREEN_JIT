@@ -1,13 +1,16 @@
 compile:
-	copy fannkuchredux.hipe fannkuchredux.erl
+	cp fannkuchredux.hipe fannkuchredux.erl
 	erlc fannkuchredux.erl
+
 measure:
-	cmd /C start /B cmd /C "scaphandre json -n 100000 -f fannkuchredux-main-12.json >NUL 2>NUL"
-	timeout /T 5 /NOBREAK > NUL
+	scaphandre json -n 100000 -f fannkuchredux-main-12.json >/dev/null 2>&1 &
+	sleep 5
 	erl -smp enable -noshell -run  fannkuchredux main 12
-	timeout /T 5 /NOBREAK > NUL
-	taskkill /F /IM scaphandre.exe
+	sleep 5
+	pkill -f scaphandre
+
 run:
 	erl -smp enable -noshell -run  fannkuchredux main 12
+
 clean:
-	del /Q *.json *.beam *.erl *.dump
+	rm -f *.json *.beam *.erl *.dump

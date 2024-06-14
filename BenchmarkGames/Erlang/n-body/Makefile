@@ -1,13 +1,16 @@
 compile:
-	copy nbody.hipe-3.hipe nbody.erl
+	cp nbody.hipe-3.hipe nbody.erl
 	erlc nbody.erl
+
 measure:
-	cmd /C start /B cmd /C "scaphandre json -n 100000 -f nbody-main-50000000.json >NUL 2>NUL"
-	timeout /T 5 /NOBREAK > NUL
+	scaphandre json -n 100000 -f nbody-main-50000000.json >/dev/null 2>&1 &
+	sleep 5
 	erl -smp enable -noshell -run  nbody main 50000000
-	timeout /T 5 /NOBREAK > NUL
-	taskkill /F /IM scaphandre.exe
+	sleep 5
+	pkill -f scaphandre
+
 run:
 	erl -smp enable -noshell -run  nbody main 50000000
+
 clean:
-	del /Q *.json *.beam *.erl *.dump
+	rm -f *.json *.beam *.erl *.dump

@@ -1,13 +1,13 @@
 compile:
-	copy revcomp.hipe revcomp.erl
+	cp revcomp.hipe revcomp.erl
 	erlc revcomp.erl
 measure:
-	cmd /C start /B cmd /C "scaphandre json -n 100000 -f revcomp-main-0.json >NUL 2>NUL"
-	timeout /T 5 /NOBREAK > NUL
+	scaphandre json -n 100000 -f revcomp-main-0.json >/dev/null 2>&1 &
+	sleep 5
 	erl -smp enable -noshell -run  revcomp main 0 < ../../revcomp-input25000000.txt
-	timeout /T 5 /NOBREAK > NUL
-	taskkill /F /IM scaphandre.exe
+	sleep 5
+	pkill -f scaphandre
 run:
 	erl -smp enable -noshell -run  revcomp main 0 < ../../revcomp-input25000000.txt
 clean:
-	del /Q *.json *.beam *.erl *.dump
+	rm -f *.json *.beam *.erl *.dump
