@@ -15,7 +15,7 @@ def main():
     print ('Checking' + root)
     makefile = os.path.join(root, "Makefile")
     if file_exists(makefile):
-      cmd = 'cd ' + root + '& make ' + action
+      cmd = 'cd ' + root + '&& make ' + action
       #cmd = 'ls -la'
       start_time = timeit.default_timer()
       # pipes = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
@@ -64,7 +64,7 @@ def main():
                 consumption = consumer.get("consumption", 0.0)
                 
                 # Check the server consumption
-                if "erl.exe" in exe.lower() and consumption != 0.0:
+                if "beam.smp" in exe.lower() and consumption != 0.0:
                     total_server_consumption += consumption
                     number_samples +=1
         if number_samples != 0:
