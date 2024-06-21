@@ -7,10 +7,6 @@ import time
 import threading
 import json
 import timeit
-# import multiprocessing
-# import signal
-# import psutil
-# import os
 
 def communicate_with_erlang_server(message, host, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as erlang_socket:
@@ -65,15 +61,13 @@ if __name__ == "__main__":
     # runtime = end_time - start_time - (num_clients * 0.1)
     runtime = end_time - start_time
 
-    # subprocess.run("sudo pkill -f 'scaphandre'")
-    subprocess.run(["sudo", "pkill", "-f", "scaphandre"], check=True)
+    # kill the scaphandre process
+    subprocess.run(f'sudo pkill -f scaphandre', shell=True)
 
-    subprocess.run(["sudo", "pkill", "-f", "erl"], check=True)
+    
+    # kill the erlang process
+    subprocess.run(f'sudo pkill -f beam.smp', shell=True)
 
-    # # Then kill the process
-    # subprocess.run(f'taskkill /F /IM scaphandre.exe', shell=True)
-    # # # Then kill the process
-    # subprocess.run(f'taskkill /F /IM erl.exe', shell=True)
 
     current_path = os.getcwd()
     json_file_path = os.path.join(current_path, f"{file_name}.json")
@@ -103,23 +97,10 @@ if __name__ == "__main__":
 
     final_consumption = average_energy * runtime
 
-    # Print the results
-    # print("Total consumption of server_old.exe:", total_server_consumption)
-
     # Write runtime and function name to the csv file
     with open('erlang_output_nosleep.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
-        # csv_writer.writerow(['Function', 'Average Runtime'])
         csv_writer.writerow([file_name, final_consumption, runtime])
-
-    # # Open the file in write mode ('w')
-    # with open(file_name+'.txt', 'w') as f:
-    #     # Write to the text file
-    #     f.write(f"The runtime of {file_name} is: {runtime} seconds\n")
-    #     f.write(f"Total consumption of {server_name}: {total_server_consumption}\n")
-    #     f.write(f"Total samples of {server_name}: {number_samples}\n")
-    #     f.write(f"Average consumption of {server_name}: {average_energy}\n")
         
-
     # Exit the program
     sys.exit()
