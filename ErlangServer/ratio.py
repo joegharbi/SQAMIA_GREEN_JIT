@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Read the CSV file
-df = pd.read_csv('linux_data_new.csv', sep=';', header=None)
+df = pd.read_csv('erlang_output_linux27.csv', sep=';', header=None)
 
 # Convert the third column from microjoules to joules
 df[1] = df[1] / 1e6
@@ -16,4 +16,4 @@ df[2] = df[2].round(3)
 df['new_column'] = df['new_column'].round(5)
 
 # Save the updated DataFrame back to a CSV file
-df.to_csv('ratio_linux.csv', sep=';', header=False, index=False)
+df.to_csv('ratio_linux27.csv', sep=';', header=False, index=False)

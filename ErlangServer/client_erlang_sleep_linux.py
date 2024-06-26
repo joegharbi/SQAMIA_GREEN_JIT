@@ -25,7 +25,7 @@ if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
 
-    num_clients = 4000
+    num_clients = 10000
     server_name = "erl"
     file_name = f"report_{server_name}_{num_clients}"
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     final_consumption = average_energy * runtime
 
     # Write runtime and function name to the csv file
-    with open('erlang_output_linux.csv', 'a', newline='') as csv_file:
+    with open('erlang_output_linux27.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
         csv_writer.writerow([file_name, final_consumption, runtime])
         

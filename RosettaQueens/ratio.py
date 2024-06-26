@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Read the CSV file
-df = pd.read_csv('list16_both.csv', sep=';', header=None)
+df = pd.read_csv('nqueens27.csv', sep=';', header=None)
 
 # Convert the third column from microjoules to joules
 df[4] = df[4] / 1e6
@@ -16,4 +16,4 @@ df[5] = df[5].round(2)
 df['new_column'] = df['new_column'].round(2)
 
 # Save the updated DataFrame back to a CSV file
-df.to_csv('ratio_list16_both.csv', sep=';', header=False, index=False)
+df.to_csv('ratio_n_linux_queens27.csv', sep=';', header=False, index=False)
