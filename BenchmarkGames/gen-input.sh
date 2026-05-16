@@ -18,6 +18,11 @@ if [[ ! -f "$FASTA_SCRIPT" ]]; then
   exit 1
 fi
 
+if ! command -v python >/dev/null 2>&1; then
+  echo "Missing Python interpreter in PATH" >&2
+  exit 1
+fi
+
 echo "Generating input for k-nucleotide benchmark"
 python "$FASTA_SCRIPT" 25000000 > "$KN_TMP"
 mv "$KN_TMP" "$SCRIPT_DIR/knucleotide-input25000000.txt"

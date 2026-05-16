@@ -57,7 +57,11 @@ def main() -> None:
                             total_server_consumption += consumption
                             number_samples += 1
 
-                total_consumption = total_server_consumption / number_samples if number_samples else 0
+                total_consumption = (
+                    total_server_consumption / number_samples
+                    if number_samples
+                    else 0
+                )
                 final_consumption = total_consumption * runtime
                 output_file = RAW_RESULTS_DIR / 'output.csv'
                 with output_file.open('a', newline='') as csv_file:
