@@ -9,10 +9,6 @@ from paths import BASE_DIR
 SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__', '.git'}
 
 
-def file_exists(file_path: Path) -> bool:
-    return file_path.is_file()
-
-
 def measure_runtime(lang_path: Path, function_folder: str, measurement_count: int = 10) -> float:
     runtimes = []
 
@@ -31,7 +27,7 @@ def main() -> None:
             continue
 
         makefile = entry / 'Makefile'
-        if not file_exists(makefile):
+        if not makefile.is_file():
             continue
 
         results_dir = entry / 'results' / 'summary'

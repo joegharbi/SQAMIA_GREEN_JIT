@@ -15,6 +15,8 @@ def resolve_input_path(filename: str, *search_dirs: Path) -> Path:
     path = Path(filename)
     if path.is_absolute() or path.parent != Path('.'):
         return path
+    if not search_dirs:
+        return path
     for directory in search_dirs:
         candidate = directory / filename
         if candidate.exists():

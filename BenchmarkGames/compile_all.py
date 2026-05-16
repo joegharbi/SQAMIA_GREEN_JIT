@@ -9,10 +9,6 @@ ACTION = 'compile'
 SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__', '.git'}
 
 
-def file_exists(file_path: Path) -> bool:
-    return file_path.is_file()
-
-
 def main() -> None:
     for root, dirs, _ in os.walk(BASE_DIR):
         dirs[:] = [directory for directory in dirs if directory not in SKIP_DIRS]
@@ -20,7 +16,7 @@ def main() -> None:
         print(f'Checking {root_path.relative_to(BASE_DIR)}')
         makefile = root_path / 'Makefile'
 
-        if file_exists(makefile):
+        if makefile.is_file():
             completed = subprocess.run(
                 ['make', ACTION],
                 cwd=root_path,
