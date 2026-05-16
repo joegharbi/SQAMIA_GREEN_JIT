@@ -9,12 +9,11 @@ from pathlib import Path
 
 from paths import BASE_DIR, RAW_RESULTS_DIR
 
-ACTION = 'compile'
 SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__'}
 VALID_ACTIONS = {'compile', 'run', 'clean', 'measure'}
 
 
-def main() -> None:
+def main(action: str) -> None:
     for root, dirs, _ in os.walk(BASE_DIR):
         dirs[:] = [directory for directory in dirs if directory not in SKIP_DIRS]
         root_path = Path(root)
@@ -24,7 +23,7 @@ def main() -> None:
         if makefile.is_file():
             start_time = timeit.default_timer()
             completed = subprocess.run(
-                ['make', ACTION],
+                ['make', action],
                 cwd=root_path,
                 capture_output=True,
                 text=True,
@@ -32,13 +31,13 @@ def main() -> None:
             end_time = timeit.default_timer()
             runtime = end_time - start_time - 10
 
-            if ACTION in {'compile', 'run', 'clean'}:
+            if action in {'compile', 'run', 'clean'}:
                 if completed.returncode != 0:
                     print(f'[E] Error on {root_path}:')
                     print(completed.stderr.strip())
                 else:
                     print('[OK]')
-            elif ACTION == 'measure' and root_path != BASE_DIR:
+            elif action == 'measure' and root_path != BASE_DIR:
                 json_files = sorted(root_path.glob('*.json'))
                 if not json_files:
                     continue
@@ -71,15 +70,16 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    action = 'compile'
     if len(sys.argv) == 2:
         candidate_action = sys.argv[1]
         if candidate_action in VALID_ACTIONS:
             print(f'Performing "{candidate_action}" action...')
-            ACTION = candidate_action
+            action = candidate_action
         else:
             print(f'Error: Unrecognized action "{candidate_action}"')
             sys.exit(1)
     else:
         print('Performing "compile" action...')
 
-    main()
+    main(action)

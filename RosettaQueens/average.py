@@ -3,7 +3,7 @@ import sys
 
 import pandas as pd
 
-from paths import RAW_RESULTS_DIR, SUMMARY_RESULTS_DIR, resolve_input_path, resolve_output_path
+from paths import DERIVED_RESULTS_DIR, RAW_RESULTS_DIR, SUMMARY_RESULTS_DIR, resolve_input_path, resolve_output_path
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]

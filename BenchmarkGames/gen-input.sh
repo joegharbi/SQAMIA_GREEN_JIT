@@ -18,19 +18,20 @@ if [[ ! -f "$FASTA_SCRIPT" ]]; then
   exit 1
 fi
 
-if ! command -v python >/dev/null 2>&1; then
+PYTHON_BIN=$(command -v python || command -v python3 || true)
+if [[ -z "$PYTHON_BIN" ]]; then
   echo "Missing Python interpreter in PATH" >&2
   exit 1
 fi
 
 echo "Generating input for k-nucleotide benchmark"
-python "$FASTA_SCRIPT" 25000000 > "$KN_TMP"
+"$PYTHON_BIN" "$FASTA_SCRIPT" 25000000 > "$KN_TMP"
 mv "$KN_TMP" "$SCRIPT_DIR/knucleotide-input25000000.txt"
 
 echo "Generating input for reverse-complement benchmark"
-python "$FASTA_SCRIPT" 25000000 > "$REV_TMP"
+"$PYTHON_BIN" "$FASTA_SCRIPT" 25000000 > "$REV_TMP"
 mv "$REV_TMP" "$SCRIPT_DIR/revcomp-input25000000.txt"
 
 echo "Generating input for regex-redux benchmark"
-python "$FASTA_SCRIPT" 5000000 > "$REG_TMP"
+"$PYTHON_BIN" "$FASTA_SCRIPT" 5000000 > "$REG_TMP"
 mv "$REG_TMP" "$SCRIPT_DIR/regexredux-input5000000.txt"

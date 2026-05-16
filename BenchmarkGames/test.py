@@ -22,9 +22,11 @@ def measure_runtime(lang_path: Path, function_folder: str, measurement_count: in
 
 
 def main() -> None:
-    for entry in sorted(BASE_DIR.iterdir()):
-        if not entry.is_dir() or entry.name in SKIP_DIRS:
-            continue
+    entries = sorted(
+        (entry for entry in BASE_DIR.iterdir() if entry.is_dir() and entry.name not in SKIP_DIRS),
+        key=lambda entry: entry.name,
+    )
+    for entry in entries:
 
         makefile = entry / 'Makefile'
         if not makefile.is_file():
