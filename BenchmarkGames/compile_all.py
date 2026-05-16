@@ -6,7 +6,7 @@ from pathlib import Path
 from paths import BASE_DIR
 
 ACTION = 'compile'
-SKIP_DIRS = {'archive', 'results', '__pycache__', '.git'}
+SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__', '.git'}
 
 
 def file_exists(file_path: Path) -> bool:

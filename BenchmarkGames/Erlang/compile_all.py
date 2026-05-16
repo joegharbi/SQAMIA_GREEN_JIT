@@ -10,7 +10,7 @@ from pathlib import Path
 from paths import BASE_DIR, RAW_RESULTS_DIR
 
 ACTION = 'compile'
-SKIP_DIRS = {'results', '__pycache__'}
+SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__'}
 
 
 def main() -> None:
