@@ -1,42 +1,27 @@
-import pandas as pd
-import sys
 import os
+import sys
 
-# Get the input and output file names from the command line arguments
+import pandas as pd
+
+from paths import DERIVED_RESULTS_DIR, RAW_RESULTS_DIR, SUMMARY_RESULTS_DIR, resolve_input_path, resolve_output_path
+
 input_file = sys.argv[1]
 output_file = sys.argv[2]
+input_path = resolve_input_path(input_file, RAW_RESULTS_DIR, SUMMARY_RESULTS_DIR, DERIVED_RESULTS_DIR)
+output_path = resolve_output_path(output_file, SUMMARY_RESULTS_DIR)
 
-# Load the data
-df = pd.read_csv(input_file, delimiter=';')
-
-# Convert the 5th column from microjoules to joules
+df = pd.read_csv(input_path, delimiter=';')
 df.iloc[:, 4] = df.iloc[:, 4] / 1e6
-
-# Add a new column that is the result of dividing the 4th column by the 5th column
 df['new_column'] = df.iloc[:, 3] / df.iloc[:, 4]
-
-# Drop the fourth column
 df = df.drop(df.columns[3], axis=1)
-
-# Group by the first three columns and calculate the mean of the remaining columns
 grouped_df = df.groupby(df.columns.tolist()[:3]).mean().reset_index()
-
-# # Replace all NaN values with 0.0
-# grouped_df = grouped_df.fillna(0.0)
-
-# Round the numbers to 2 decimal places
 grouped_df = grouped_df.round(2)
 
-# Check if the file exists and if it's empty
-file_exists = os.path.isfile(output_file)
-file_is_empty = file_exists and os.stat(output_file).st_size == 0
+file_exists = os.path.isfile(output_path)
+file_is_empty = file_exists and os.stat(output_path).st_size == 0
 
-# Open the file in append mode
-with open(output_file, 'a') as f:
-    # If the file is empty, write the header
+with output_path.open('a') as file_handle:
     if file_is_empty:
-        f.write(';'.join(grouped_df.columns) + '\n')
-
-    # Write the data
+        file_handle.write(';'.join(grouped_df.columns) + '\n')
     for _, row in grouped_df.iterrows():
-        f.write(';'.join(row.astype(str).values) + '\n')
+        file_handle.write(';'.join(map(str, row.tolist())) + '\n')

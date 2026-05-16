@@ -25,7 +25,7 @@ def erlang_client_thread(message, host, port_erlang):
 if __name__ == "__main__":
     message = "Hello, Servers!"
     host = "localhost"
-    num_clients = 10000
+    num_clients = 4000
     server_name = "erl"
     file_name = f"report_{server_name}_{num_clients}"
     json_file_path = GENERATED_DIR / f"{file_name}.json"
@@ -54,8 +54,8 @@ if __name__ == "__main__":
     end_time = timeit.default_timer()
     runtime = end_time - start_time - (num_clients * 0.1)
 
-    subprocess.run('sudo pkill -f scaphandre', shell=True)
-    subprocess.run('sudo pkill -f beam.smp', shell=True)
+    subprocess.run('taskkill /F /IM scaphandre.exe', shell=True)
+    subprocess.run('taskkill /F /IM erl.exe', shell=True)
 
     with json_file_path.open('r') as file_handle:
         data = json.load(file_handle)
@@ -69,7 +69,7 @@ if __name__ == "__main__":
         for consumer in consumers:
             exe = consumer.get('exe', '')
             consumption = consumer.get('consumption', 0.0)
-            if 'beam.smp' in exe.lower():
+            if f'{server_name}.exe' in exe.lower():
                 total_server_consumption += consumption
                 number_samples += 1
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         average_energy = total_server_consumption / number_samples
 
     final_consumption = average_energy * runtime
-    output_file = RAW_RESULTS_DIR / 'erlang_output_linux27.csv'
+    output_file = RAW_RESULTS_DIR / 'erlang_output.csv'
     with output_file.open('a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=';')
         csv_writer.writerow([file_name, final_consumption, runtime])

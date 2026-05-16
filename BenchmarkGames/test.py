@@ -1,50 +1,53 @@
+import csv
 import os
 import subprocess
-import csv
 import timeit
+from pathlib import Path
 
-def file_exists(file_path):
-    return os.path.isfile(file_path) if file_path else False
+from paths import BASE_DIR
 
-def measure_runtime(lang_path, function_folder, measurement_count=10):
+SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__', '.git'}
+
+
+def measure_runtime(lang_path: Path, function_folder: str, measurement_count: int = 10) -> float:
     runtimes = []
 
     for _ in range(measurement_count):
         start_time = timeit.default_timer()
-        subprocess.run(['make', 'measure'], cwd=os.path.join(lang_path, function_folder))
+        subprocess.run(['make', 'measure'], cwd=lang_path / function_folder, check=False)
         end_time = timeit.default_timer()
         runtimes.append(end_time - start_time)
 
-    avg_runtime = sum(runtimes) / measurement_count
-    return avg_runtime
+    return sum(runtimes) / measurement_count
 
-def main():
-    path = '.'  # Current directory as the root path
 
-    for root, dirs, files in os.walk(path):
-        for lang_folder in dirs:
-            lang_path = os.path.join(root, lang_folder)
-            # print(lang_path)
-            makefile = os.path.join(lang_path, "Makefile")
-            # print (makefile)
+def main() -> None:
+    entries = sorted(
+        (entry for entry in BASE_DIR.iterdir() if entry.is_dir() and entry.name not in SKIP_DIRS),
+        key=lambda entry: entry.name,
+    )
+    for entry in entries:
 
-            if file_exists(makefile):
-                print ("makefile" + makefile)
-                csv_file_path = os.path.join(f'{lang_folder}.csv')
-                print(csv_file_path)
+        makefile = entry / 'Makefile'
+        if not makefile.is_file():
+            continue
 
-                with open(csv_file_path, 'w', newline='') as csv_file:
-                    csv_writer = csv.writer(csv_file)
-                    csv_writer.writerow(['Function', 'Average Runtime'])
+        results_dir = entry / 'results' / 'summary'
+        results_dir.mkdir(parents=True, exist_ok=True)
+        csv_file_path = results_dir / f'{entry.name}.csv'
 
-                    for function_folder in os.listdir(os.path.join(lang_path)):
-                        if os.path.isdir(os.path.join(lang_path, function_folder)):
-                            avg_runtime = measure_runtime(lang_path, function_folder)
+        with csv_file_path.open('w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow(['Function', 'Average Runtime'])
 
-                            # Write the results to CSV
-                            csv_writer.writerow([function_folder, avg_runtime])
+            for function_folder in sorted(os.listdir(entry)):
+                function_path = entry / function_folder
+                if function_path.is_dir() and function_folder not in SKIP_DIRS:
+                    avg_runtime = measure_runtime(entry, function_folder)
+                    csv_writer.writerow([function_folder, avg_runtime])
 
-                    print(f'Results for {lang_folder} saved to {csv_file_path}')
+        print(f'Results for {entry.name} saved to {csv_file_path}')
+
 
 if __name__ == '__main__':
     main()
