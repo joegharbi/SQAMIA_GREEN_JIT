@@ -7,6 +7,7 @@ from paths import BASE_DIR
 
 ACTION = 'compile'
 SKIP_DIRS = {'archive', 'results', 'generated', '__pycache__', '.git'}
+VALID_ACTIONS = {'compile', 'run', 'clean'}
 
 
 def main() -> None:
@@ -35,7 +36,7 @@ def main() -> None:
 if __name__ == '__main__':
     if len(sys.argv) == 2:
         candidate_action = sys.argv[1]
-        if candidate_action in {'compile', 'run', 'clean'}:
+        if candidate_action in VALID_ACTIONS:
             print(f'Performing "{candidate_action}" action...')
             ACTION = candidate_action
         else:
