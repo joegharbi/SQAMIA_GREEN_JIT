@@ -1,0 +1,23 @@
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Erlang/runtime generated files
+*.beam
+erl_crash.dump
+*.dump
+
+# Java/build outputs
+*.class
+
+# Generic temporary files
+*.log
+*.tmp
+*.temp
+*~
+
+# Editor/OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
