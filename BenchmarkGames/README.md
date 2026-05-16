@@ -1,50 +1,26 @@
-# Energy Efficiency in Programming Languages
-#### Investigating The Energy Consumption of Erlang Programming Language Using the _Computer Language Benchmark Game_ as a case study.
+# BenchmarkGames
 
-## How to use this repo:
-- Windows 10 or later
-- Scaphandre installed [from here](https://hubblo-org.github.io/scaphandre-documentation/)
-- Rapl driver for windows [found here](https://github.com/hubblo-org/windows-rapl-driver)
-- compile the needed benchmarks(C, Erlang, Java)
-- run the the python scripts that will start the measurements and output the results in a CSV file.
+This folder contains the benchmark game case study used to compare Erlang against other implementations and runtime configurations.
+The benchmark source folders are kept close to the original benchmark layout, while analysis outputs are grouped separately.
 
-### What is this?
+## Main contents
 
-This repo contains the source code of 5 distinct benchmarks, implemented in 4 different languages (exactly as taken from the [Computer Language Benchmark Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/)).
+- `Erlang/` - Erlang benchmark implementations, Makefiles, and Erlang-specific results.
+- `compile_all.py` - walks the benchmark folders and runs `make compile`, `make run`, or `make clean`.
+- `test.py` - records average runtime per benchmark folder.
+- `gen-input.sh` - regenerates the large text inputs used by some benchmarks.
+- `fasta.python3-3.py` - input generator used by `gen-input.sh`.
+- `results/` - checked-in benchmark tables used for analysis.
+- `archive/` - legacy planning notes kept for project history.
 
-It also contains tools which provide support, for each benchmark of each language, to 4 operations: *(1)* **compilation**, *(2)* **execution**, *(3)* and **energy measuring**.
+## Results layout
 
-#### The Structure
-Basically, the directories tree will look something like this:
+- `results/raw/` - direct outputs from benchmark runs when they are kept in this project.
+- `results/summary/` - curated input tables such as `data.csv`.
+- `results/derived/` - normalized or ratio tables produced from the summary data.
 
-Taking the `C` language as an example, this is how the folder for the `binary-trees` and `k-nucleotide` benchmarks would look like:
+## Notes
 
-```Java
-| ...
-| C
-	| binary-trees
-		| binarytrees.gcc-3.c
-		| Makefile
-	| k-nucleotide
-		| knucleotide.c
-		| knucleotide-input25000000.txt
-		| Makefile
-	| ...
-| ...
-
-```
-
-
-#### IMPORTANT NOTE:
-This repo is edited by Youssef Gharbi supervised by Dr. Melinda Tóth. The original work exits here in [The Computer Language Benchmark Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/)
-
-
-### Contacts and References
-
-[Green Software Lab](http://greenlab.di.uminho.pt)
-
-Main contributors: [@Marco Couto](http://github.com/MarcoCouto) and [@Rui Pereira](http://haslab.uminho.pt/ruipereira)
-
-
-[The Computer Language Benchmark Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/)
-
+- The large text benchmark inputs are generated in this folder because existing Makefiles reference them from here.
+- Historical CSV files are kept because they support paper writing and later cross-checking.
+- This folder is still active, but some outputs are historical snapshots rather than regularly refreshed data.

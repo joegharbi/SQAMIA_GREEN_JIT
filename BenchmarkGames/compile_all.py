@@ -1,57 +1,51 @@
-import sys, os, time, timeit, csv, json, subprocess
-from subprocess import call, check_output, Popen, PIPE
-from fnmatch import fnmatch
+import os
+import subprocess
+import sys
+from pathlib import Path
 
-path = '.'
-action = 'compile'
+from paths import BASE_DIR
 
-def file_exists(file_path):
-    if not file_path:
-        return False
-    else:
-        return os.path.isfile(file_path)
-
-def main():
-  for root, dirs, files in os.walk(path):
-    print ('Checking' + root)
-    makefile = os.path.join(root, "Makefile")
-    if file_exists(makefile):
-      cmd = 'cd ' + root + '&& make ' + action
-      #cmd = 'ls -la'
-      pipes = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+ACTION = 'compile'
+SKIP_DIRS = {'archive', 'results', '__pycache__', '.git'}
 
 
-      
-      if (action == 'compile') | (action == 'run'):
-        if pipes.returncode != 0:
-          # an error happened!
-          err_msg = "%s. Code: %s" % (pipes.stderr.strip(), pipes.returncode)
-          print ('[E] Error on ' + root + ': ')
-          print (err_msg)
-        elif len(pipes.stderr):
-          # return code is 0 (no error), but we may want to
-          # do something with the info on std_err
-          # i.e. logger.warning(std_err)
-          print ('[OK]')
-        else:
-          print ('[OK]')
-      if action == 'measure':
-        if root != "." and 'git' not in root and 'c' not in root:
-          command = ["python", "./compile_all.py", "measure"]
-          subprocess.run(command)
-          time.sleep(5)
+def file_exists(file_path: Path) -> bool:
+    return file_path.is_file()
+
+
+def main() -> None:
+    for root, dirs, _ in os.walk(BASE_DIR):
+        dirs[:] = [directory for directory in dirs if directory not in SKIP_DIRS]
+        root_path = Path(root)
+        print(f'Checking {root_path.relative_to(BASE_DIR)}')
+        makefile = root_path / 'Makefile'
+
+        if file_exists(makefile):
+            completed = subprocess.run(
+                ['make', ACTION],
+                cwd=root_path,
+                capture_output=True,
+                text=True,
+            )
+
+            if ACTION in {'compile', 'run', 'clean'}:
+                if completed.returncode != 0:
+                    print(f'[E] Error on {root_path}:')
+                    print(completed.stderr.strip())
+                else:
+                    print('[OK]')
+
+
 if __name__ == '__main__':
-  if len(sys.argv) == 2:
-    act = sys.argv[1]
-    if (act == 'compile') | (act == 'run') | (act == 'clean') | (act == 'measure'):
-      print ('Performing \"' + act + '\" action...')
-      action = act
+    if len(sys.argv) == 2:
+        candidate_action = sys.argv[1]
+        if candidate_action in {'compile', 'run', 'clean'}:
+            print(f'Performing "{candidate_action}" action...')
+            ACTION = candidate_action
+        else:
+            print(f'Error: Unrecognized action "{candidate_action}"')
+            sys.exit(1)
     else:
-      print ('Error: Unrecognized action \"' + act + '\"')
-      sys.exit(1)
-  else:
-    print ('Performing \"compile\" action...')
-    action = 'compile'
-  
-  main()
-    
+        print('Performing "compile" action...')
+
+    main()
