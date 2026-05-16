@@ -1,50 +1,26 @@
-# Energy Efficiency in Programming Languages
-#### Investigating The Energy Consumption of Erlang Programming Language Using the _Computer Language Benchmark Game_ as a case study.
+# BenchmarkGames
 
-## How to use this repo:
-- Windows 10 or later
-- Scaphandre installed [from here](https://hubblo-org.github.io/scaphandre-documentation/)
-- Rapl driver for windows [found here](https://github.com/hubblo-org/windows-rapl-driver)
-- compile the needed benchmarks(C, Erlang, Java)
-- run the the python scripts that will start the measurements and output the results in a CSV file.
+Status: **active research area** with historical results kept for reproducibility.
 
-### What is this?
+## Purpose
 
-This repo contains the source code of 5 distinct benchmarks, implemented in 4 different languages (exactly as taken from the [Computer Language Benchmark Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/)).
+This folder contains benchmark-game based experiments used to compare energy and runtime behavior, especially across OTP versions and language implementations.
 
-It also contains tools which provide support, for each benchmark of each language, to 4 operations: *(1)* **compilation**, *(2)* **execution**, *(3)* and **energy measuring**.
+## Main content
 
-#### The Structure
-Basically, the directories tree will look something like this:
+- `Erlang/` - Erlang benchmark cases, benchmark-specific Makefiles, and OTP comparison CSV outputs.
+- `compile_all.py` - helper to run compile/run/measure actions across benchmark folders.
+- `*.csv` at this level - consolidated/normalized outputs used in analysis.
+- `old_measurements/` - legacy and historical measurement exports kept for traceability.
 
-Taking the `C` language as an example, this is how the folder for the `binary-trees` and `k-nucleotide` benchmarks would look like:
+## Generated vs manual
 
-```Java
-| ...
-| C
-	| binary-trees
-		| binarytrees.gcc-3.c
-		| Makefile
-	| k-nucleotide
-		| knucleotide.c
-		| knucleotide-input25000000.txt
-		| Makefile
-	| ...
-| ...
+- Benchmark source/configuration files are manually maintained.
+- CSV outputs and some JSON measurement files are generated during experiments.
+- Legacy generated outputs are intentionally versioned when tied to paper analysis.
 
-```
+## Reproducibility notes
 
-
-#### IMPORTANT NOTE:
-This repo is edited by Youssef Gharbi supervised by Dr. Melinda Tóth. The original work exits here in [The Computer Language Benchmark Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/)
-
-
-### Contacts and References
-
-[Green Software Lab](http://greenlab.di.uminho.pt)
-
-Main contributors: [@Marco Couto](http://github.com/MarcoCouto) and [@Rui Pereira](http://haslab.uminho.pt/ruipereira)
-
-
-[The Computer Language Benchmark Game](https://benchmarksgame-team.pages.debian.net/benchmarksgame/)
-
+- Existing files reflect a Windows-based measurement workflow.
+- Keep historical CSV/JSON outputs unless they are clearly unrelated temporary files.
+- For local cleanup of caches and bytecode-like artifacts, use `../scripts/cleanup_generated.sh`.

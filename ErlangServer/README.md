@@ -1,9 +1,29 @@
-# Green Erlang framework - echo server case study
+# ErlangServer
 
-## How to use this repo:
-- Windows 10 or later.
-- Scaphandre installed [from here](https://hubblo-org.github.io/scaphandre-documentation/).
-- Rapl driver for windows [found here](https://github.com/hubblo-org/windows-rapl-driver).
-- compile the needed benchmarks(C, Erlang, Java).
-- run the the python scripts that will start the measurements and output the results in a CSV file.
+Status: **active case study** with legacy outputs preserved.
 
+## Purpose
+
+Echo server benchmark case study comparing Erlang, C, and Java under different client and scheduling settings.
+
+## Important scripts
+
+- `measure_start.py` - CLI measurement driver around Scaphandre JSON output.
+- `client_erlang_*.py` - workload launch variants.
+- `norm.py`, `ration.py`, `consumption.py` - post-processing and aggregation helpers.
+
+## Important outputs
+
+- `*.csv` in this folder - processed and comparison outputs used in analysis.
+- `old_measurements/` - legacy raw reports and historical exports.
+
+## Generated vs manual
+
+- Source files (`.erl`, `.c`, `.java`, `.py`) are manually maintained.
+- Many CSVs are generated experiment outputs and kept for reproducibility.
+
+## Reproducibility notes
+
+- Workflow was primarily executed on Windows with Scaphandre and RAPL driver.
+- Keep historical outputs that support reported findings.
+- Use `../scripts/cleanup_generated.sh` for local cache/generated cleanup only.
